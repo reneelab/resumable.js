@@ -2,12 +2,13 @@ var fs = require('fs'), path = require('path'), util = require('util'), Stream =
 
 
 
-module.exports = resumable = function(temporaryFolder){
+module.exports = resumable = function(temporaryFolder, prefix='resumable-'){
   var $ = this;
   $.temporaryFolder = temporaryFolder;
   $.maxFileSize = null;
   $.fileParameterName = 'file';
-
+  $.prefix = prefix;
+  
   try {
     fs.mkdirSync($.temporaryFolder);
   }catch(e){}
@@ -21,7 +22,7 @@ module.exports = resumable = function(temporaryFolder){
     // Clean up the identifier
     identifier = cleanIdentifier(identifier);
     // What would the file name be?
-    return path.join($.temporaryFolder, './resumable-'+identifier+'.'+chunkNumber);
+    return path.join($.temporaryFolder, $.prefix+identifier+'.'+chunkNumber);
   }
 
   var validateRequest = function(chunkNumber, chunkSize, totalSize, identifier, filename, fileSize){
